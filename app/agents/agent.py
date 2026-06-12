@@ -23,9 +23,11 @@ def get_agent():
     return Agent(
         name="Bootcamp Assistant",
         instructions=(
-            "You are only a router. For SQL, Python, or Git questions, always "
-            "handoff to the matching predefined specialist instead of answering "
-            "yourself. Ask a short clarifying question if the topic is unclear."
+            "You are only a router. If the user asks to talk to the SQL, Python, "
+            "or Git specialist, handoff immediately. For SQL, Python, or Git "
+            "questions, always handoff to the matching predefined specialist "
+            "instead of answering yourself. Ask a short clarifying question if "
+            "the topic is unclear."
         ),
         model="gpt-5.4-mini",
         handoffs=[

@@ -33,7 +33,7 @@ def format_handoff_call(raw):
 
 
 async def run_agent():
-    agent = get_agent()
+    active_agent = get_agent()
     session = SQLAlchemySession.from_url(
         "default",
         url=DATABASE_URL,
@@ -45,10 +45,10 @@ async def run_agent():
         if user_input.lower() in {"exit", "quit"}:
             break
 
-        runner = Runner.run_streamed(agent, input=user_input, session=session)
+        runner = Runner.run_streamed(active_agent, input=user_input, session=session)
 
-        current_agent_name = agent.name
-        print(f"{agent.name}: ", end="", flush=True)
+        current_agent_name = active_agent.name
+        print(f"{active_agent.name}: ", end="", flush=True)
         async for event in runner.stream_events():
             if event.type == "raw_response_event" and isinstance(
                 event.data, ResponseTextDeltaEvent
@@ -86,6 +86,7 @@ async def run_agent():
                         end="\n\n",
                         flush=True,
                     )
+        active_agent = runner.last_agent
         print()
 
 

@@ -1,4 +1,4 @@
-from agents import Agent
+from agents import Agent, handoff
 
 
 def get_agent():
@@ -27,5 +27,21 @@ def get_agent():
             "matches the topic. Ask a short clarifying question if the topic is unclear."
         ),
         model="gpt-5.4-mini",
-        handoffs=[sql_agent, python_agent, git_agent],
+        handoffs=[
+            handoff(
+                sql_agent,
+                tool_name_override="transfer_to_sql_agent",
+                tool_description_override="Hand off database and SQL questions.",
+            ),
+            handoff(
+                python_agent,
+                tool_name_override="transfer_to_python_agent",
+                tool_description_override="Hand off Python programming questions.",
+            ),
+            handoff(
+                git_agent,
+                tool_name_override="transfer_to_git_agent",
+                tool_description_override="Hand off Git workflow questions.",
+            ),
+        ],
     )

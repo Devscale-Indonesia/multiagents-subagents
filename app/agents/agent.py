@@ -1,19 +1,31 @@
 from agents import Agent
 
-from app.agents.prompts import AGENT_INSTRUCTIONS
-from app.agents.tools import (
-    crawl_web,
-    execute_command,
-    extract_web,
-    search_web,
-    write_file,
-)
-
 
 def get_agent():
-    return Agent(
-        name="Assistant",
-        instructions=AGENT_INSTRUCTIONS,
+    sql_agent = Agent(
+        name="SQL Agent",
+        instructions="Help students with database design, queries, joins, and indexes.",
         model="gpt-5.4-mini",
-        tools=[search_web, extract_web, crawl_web, write_file, execute_command],
+    )
+
+    python_agent = Agent(
+        name="Python Agent",
+        instructions="Help students with Python syntax, debugging, and small scripts.",
+        model="gpt-5.4-mini",
+    )
+
+    git_agent = Agent(
+        name="Git Agent",
+        instructions="Help students with commits, branches, merges, and pull requests.",
+        model="gpt-5.4-mini",
+    )
+
+    return Agent(
+        name="Bootcamp Assistant",
+        instructions=(
+            "Route each student question to the predefined specialist that best "
+            "matches the topic. Ask a short clarifying question if the topic is unclear."
+        ),
+        model="gpt-5.4-mini",
+        handoffs=[sql_agent, python_agent, git_agent],
     )

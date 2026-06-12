@@ -1,3 +1,4 @@
+import json
 from asyncio import run
 
 from agents import Runner
@@ -9,6 +10,21 @@ from app.agents.agent import get_agent
 from app.core.settings import DATABASE_URL
 
 load_dotenv()
+
+
+def format_tool_call(raw):
+    name = getattr(raw, "name", "unknown")
+    arguments = getattr(raw, "arguments", "{}")
+
+    try:
+        arguments = json.loads(arguments)
+    except json.JSONDecodeError:
+        pass
+
+    if name == "write_file" and isinstance(arguments, dict):
+        arguments = {"path": arguments.get("path")}
+
+    return f"Tool call: {name}({arguments})"
 
 
 async def run_agent():
@@ -36,7 +52,7 @@ async def run_agent():
                 if event.item.type == "tool_call_item":
                     raw = event.item.raw_item
                     print(
-                        f"\nTool call: {raw}",
+                        f"\n{format_tool_call(raw)}",
                         end="\n\n",
                         flush=True,
                     )

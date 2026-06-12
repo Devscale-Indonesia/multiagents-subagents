@@ -1,0 +1,11 @@
+[project]
+name = "handsoff"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    "aiosqlite>=0.22.1",
+    "greenlet>=3.5.1",
+    "openai-agents[sqlalchemy]>=0.17.5",
+    "python-dotenv>=1.2.2",
+    "tavily-python>=0.7.26",
+]

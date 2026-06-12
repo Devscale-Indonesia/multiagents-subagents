@@ -1,4 +1,4 @@
-from agents import Agent
+from agents import Agent, handoff
 
 
 def get_agent():
@@ -22,5 +22,16 @@ def get_agent():
             "request is unclear, ask one short clarifying question."
         ),
         model="gpt-5.4-mini",
-        handoffs=[billing_agent, tech_agent],
+        handoffs=[
+            handoff(
+                billing_agent,
+                tool_name_override="transfer_to_billing_agent",
+                tool_description_override="Hand off billing, payment, and refund questions.",
+            ),
+            handoff(
+                tech_agent,
+                tool_name_override="transfer_to_tech_support_agent",
+                tool_description_override="Hand off product bug, login, and API questions.",
+            ),
+        ],
     )
